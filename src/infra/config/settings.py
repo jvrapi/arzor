@@ -42,6 +42,34 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ALLOW_ORIGIN", "CORS_ALLOW_ORIGIN"),
     )
 
+    # Database Configuration
+    database_url: str = Field(
+        ...,
+        description="Database connection URL",
+        validation_alias=AliasChoices("DATABASE_URL"),
+    )
+
+    database_echo: bool = Field(
+        False,
+        description="Enable SQLAlchemy SQL echo",
+        validation_alias=AliasChoices("DATABASE_ECHO", "SQLALCHEMY_ECHO"),
+    )
+    database_pool_pre_ping: bool = Field(
+        True,
+        description="Enable SQLAlchemy pool pre-ping",
+        validation_alias=AliasChoices("DATABASE_POOL_PRE_PING"),
+    )
+    database_pool_size: int = Field(
+        10,
+        description="SQLAlchemy database pool size",
+        validation_alias=AliasChoices("DATABASE_POOL_SIZE"),
+    )
+    database_max_overflow: int = Field(
+        20,
+        description="SQLAlchemy database max overflow size",
+        validation_alias=AliasChoices("DATABASE_MAX_OVERFLOW"),
+    )
+
     # BaseSettings configuration
     model_config = SettingsConfigDict(
         env_file=(".env",),
