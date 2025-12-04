@@ -1,10 +1,37 @@
 # Python-generated files
 __pycache__/
-*.py[oc]
-build/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.python-version
+*.egg-info/
 dist/
+build/
 wheels/
-*.egg-info
 
 # Virtual environments
+.env
 .venv
+.vscode*
+venv/
+env/
+.poetry/
+.amazonq*
+.ruff_cache*
+
+# Docker files
+*.dockerignore
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Dev or test files
+*.swp
+*.swo
+stdout*
+.coverage
+.*_cache/
+htmlcov/
+mypy.ini
