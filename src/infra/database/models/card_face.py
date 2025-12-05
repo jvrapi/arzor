@@ -1,5 +1,7 @@
-from sqlalchemy import ForeignKey, String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import UTC, datetime
+
+from sqlalchemy import DateTime, ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, mapped_column
 from uuid_utils import uuid7
 
 from infra.database.base import Base
@@ -7,7 +9,6 @@ from infra.database.base import Base
 
 class CardFaceModel(Base):
     __tablename__ = "card_faces"
-    card = relationship("CardModel")
 
     id: Mapped[str] = mapped_column(
         String(36),
@@ -47,4 +48,17 @@ class CardFaceModel(Base):
 
     loyalty: Mapped[str] = mapped_column(
         String(10), nullable=True, comment="Loyalty (for planeswalkers)"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(UTC),
+        comment="Timestamp when the set was created",
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(UTC),
+        onupdate=lambda: datetime.now(UTC),
+        comment="Timestamp when the set was last updated",
     )

@@ -31,7 +31,7 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ENVIRONMENT", "ENV", "APP_ENV"),
     )
     service_name: str = Field(
-        "api-boilerplate",
+        "arzor",
         description="Service name",
         validation_alias=AliasChoices("SERVICE_NAME", "SERVICE", "APP_NAME"),
     )
@@ -40,6 +40,24 @@ class Settings(BaseSettings):
         "*",
         description="CORS allow origin",
         validation_alias=AliasChoices("ALLOW_ORIGIN", "CORS_ALLOW_ORIGIN"),
+    )
+
+    host: str = Field(
+        "localhost",
+        description="Host for the application",
+        validation_alias=AliasChoices("HOST", "APP_HOST"),
+    )
+
+    port: int = Field(
+        8000,
+        description="Port for the application",
+        validation_alias=AliasChoices("PORT", "APP_PORT"),
+    )
+
+    api_workers: int = Field(
+        1,
+        description="Number of API worker processes",
+        validation_alias=AliasChoices("API_WORKERS", "WORKERS"),
     )
 
     # Database Configuration

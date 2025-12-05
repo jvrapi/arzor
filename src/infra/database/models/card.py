@@ -1,4 +1,6 @@
-from sqlalchemy import Boolean, ForeignKey, Integer, String, Text
+from datetime import UTC, datetime
+
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from uuid_utils import uuid7
 
@@ -9,6 +11,7 @@ class CardModel(Base):
     __tablename__ = "cards"
 
     set = relationship("SetModel")
+    faces = relationship("CardFaceModel")
 
     id: Mapped[str] = mapped_column(
         String(36),
@@ -112,4 +115,17 @@ class CardModel(Base):
         nullable=False,
         default=False,
         comment="Indicates if the card can appear in boosters (from Scryfall)",
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(UTC),
+        comment="Timestamp when the set was created",
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(UTC),
+        onupdate=lambda: datetime.now(UTC),
+        comment="Timestamp when the set was last updated",
     )

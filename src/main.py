@@ -3,8 +3,10 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from infra.adapters.logging import logger
 from infra.config import get_settings
-from infra.logging import logger
+from presentation.api.v1.routes import api_router
 
 settings = get_settings()
 
@@ -15,8 +17,6 @@ async def lifespan(app: FastAPI):
 
     logger.info(
         "application_starting",
-        service_name=settings.service_name,
-        environment=settings.environment,
     )
     logger.info("application_ready")
     yield
@@ -39,11 +39,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(api_router)
+
 
 def run():
     uvicorn.run(
-        "src.main:app",
-        host=settings.HOST,
-        port=settings.PORT,
-        workers=settings.API_WORKERS,
+        app,
+        host=settings.host,
+        port=settings.port,
+        workers=settings.api_workers,
     )
