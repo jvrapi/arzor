@@ -1,14 +1,11 @@
-from dataclasses import dataclass
-
-from .base import BaseEntity
+from pydantic import BaseModel
 
 
-@dataclass(frozen=True)
-class Set(BaseEntity):
-    set_type_id: str
+class CreateSetInput(BaseModel):
+    name: str
     external_id: str
     code: str
-    name: str
+    set_type_id: str
     card_count: int
     release_date: str
     is_digital: bool

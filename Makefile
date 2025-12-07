@@ -15,7 +15,7 @@ test:
 	uv run pytest
 
 test-cov:
-	uv run pytest --cov=app --cov-report=term-missing
+	uv run pytest --cov --cov-report=term-missing --cov-report=html
 
 lint:
 	uv run ruff check .
@@ -26,10 +26,10 @@ format:
 	uv run ruff check --fix .
 
 run:
-	PYTHONPATH=src uv run uvicorn src.main:app --host 0.0.0.0 --port 8000
+	PYTHONPATH=src uv run uvicorn main:app --host 0.0.0.0 --port 8000
 
 dev:
-	PYTHONPATH=src uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+	PYTHONPATH=src uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 docker-build:
 	docker build -t api:latest .

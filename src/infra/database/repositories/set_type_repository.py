@@ -1,9 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from domain.entities import SetType
 from domain.ports.repositories import ISetTypeRepository
 from infra.database.models import SetTypeModel
-from src.domain.entities import SetType
 
 
 class SetTypeRepository(ISetTypeRepository):

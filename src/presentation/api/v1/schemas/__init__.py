@@ -1,3 +1,3 @@
-from .set import CreateSetDTO, CreateSetResponseDTO
+from .set import CreateSetDTO, CreateSetResponseDTO, SetTypeResponseDTO
 
-__all__ = ["CreateSetDTO", "CreateSetResponseDTO"]
+__all__ = ["CreateSetDTO", "CreateSetResponseDTO", "SetTypeResponseDTO"]

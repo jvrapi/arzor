@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.domain.entities import SetType
+from domain.entities import SetType
 
 
 class ISetTypeRepository(ABC):

@@ -31,7 +31,7 @@ def upgrade() -> None:
         sa.Column("release_date", sa.String(length=10), nullable=True),
         sa.Column("is_digital", sa.Boolean(), nullable=False),
         sa.Column("is_foil_only", sa.Boolean(), nullable=False),
-        sa.Column("is_nonfoil_only", sa.Boolean(), nullable=False),
+        sa.Column("is_non_foil_only", sa.Boolean(), nullable=False),
         sa.ForeignKeyConstraint(
             ["set_type_id"],
             ["set_types.id"],

@@ -1,5 +1,5 @@
+from domain.entities import SetType
 from domain.ports.repositories import ISetTypeRepository
-from src.domain.entities import SetType
 
 
 class ListSetTypesUseCase:

@@ -24,7 +24,7 @@ class SetModel(Base):
     set_type_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey("set_types.id"),
-        unique=True,
+        unique=False,
         nullable=False,
         comment="Foreign key to the set type",
     )
@@ -46,7 +46,7 @@ class SetModel(Base):
         default=False,
         comment="Indicates if the set contains only foil cards",
     )
-    is_nonfoil_only: Mapped[bool] = mapped_column(
+    is_non_foil_only: Mapped[bool] = mapped_column(
         nullable=False,
         default=False,
         comment="Indicates if the set contains only non-foil cards",

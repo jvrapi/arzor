@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class SetTypeResponseDTO(BaseModel):
@@ -11,6 +11,8 @@ class SetTypeResponseDTO(BaseModel):
 
 class CreateSetDTO(BaseModel):
     name: str = Field(..., description="The name of the set")
+    code: str = Field(..., description="The code of the set")
+    external_id: UUID = Field(..., description="The external identifier of the set")
     set_type_id: UUID = Field(..., description="The unique identifier of the set type")
     card_count: int = Field(..., description="The number of cards in the set")
     release_date: str = Field(
@@ -20,9 +22,13 @@ class CreateSetDTO(BaseModel):
     is_foil_only: bool = Field(
         ..., description="Indicates if the set contains only foil cards"
     )
-    is_nonfoil_only: bool = Field(
+    is_non_foil_only: bool = Field(
         ..., description="Indicates if the set contains only non-foil cards"
     )
+
+    @field_validator("external_id", "set_type_id")
+    def to_str(cls, v):
+        return str(v)
 
 
 class CreateSetResponseDTO(BaseModel):

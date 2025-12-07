@@ -4,8 +4,10 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from domain.exceptions.base import BaseError
 from infra.adapters.logging import logger
 from infra.config import get_settings
+from presentation.api.exception_handlers import domain_exception_handler
 from presentation.api.v1.routes import api_router
 
 settings = get_settings()
@@ -38,6 +40,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_exception_handler(BaseError, domain_exception_handler)
 
 app.include_router(api_router)
 
