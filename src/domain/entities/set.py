@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from .base import BaseEntity
+from .set_type import SetType
 
 
 @dataclass(frozen=True)
@@ -14,3 +15,5 @@ class Set(BaseEntity):
     is_digital: bool
     is_foil_only: bool
     is_non_foil_only: bool
+    icon_uri: str
+    set_type: SetType | None = None

@@ -51,6 +51,11 @@ class SetModel(Base):
         default=False,
         comment="Indicates if the set contains only non-foil cards",
     )
+
+    icon_uri: Mapped[str] = mapped_column(
+        String(255), nullable=True, comment="URI for the set icon image"
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(UTC),

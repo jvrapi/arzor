@@ -18,6 +18,7 @@ input_data = CreateSetInput(
     is_foil_only=False,
     is_non_foil_only=False,
     set_type_id="set-type-uuid",
+    icon_uri="https://example.com/icon.png",
 )
 
 

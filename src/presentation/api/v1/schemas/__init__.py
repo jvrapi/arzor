@@ -1,3 +1,17 @@
-from .set import CreateSetDTO, CreateSetResponseDTO, SetTypeResponseDTO
+from .set import (
+    CreateSetDTO,
+    CreateSetResponseDTO,
+    ListSetsQueryParamsDTO,
+    PaginatedResponseDTO,
+    SetResponseDTO,
+    SetTypeResponseDTO,
+)
 
-__all__ = ["CreateSetDTO", "CreateSetResponseDTO", "SetTypeResponseDTO"]
+__all__ = [
+    "CreateSetDTO",
+    "CreateSetResponseDTO",
+    "SetTypeResponseDTO",
+    "SetResponseDTO",
+    "ListSetsQueryParamsDTO",
+    "PaginatedResponseDTO",
+]

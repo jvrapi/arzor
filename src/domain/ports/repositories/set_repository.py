@@ -1,13 +1,20 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from domain.entities import Set
+from domain.value_objects import OrderType, PaginatedResult
 
 from .set_query_params import FindSetProps
 
 
 class ISetRepository(ABC):
     @abstractmethod
-    async def list(self) -> list[Set]:
+    async def list(
+        self,
+        limit: int = 5,
+        cursor: Optional[str] = None,
+        order: OrderType = "asc",
+    ) -> PaginatedResult[Set]:
         pass
 
     @abstractmethod

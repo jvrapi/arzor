@@ -1,8 +1,12 @@
+from typing import Optional
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
-from domain.entities import Set
+from domain.entities import Set, SetType
 from domain.ports.repositories import FindSetProps, ISetRepository
+from domain.value_objects import OrderType, PaginatedResult
 from infra.database.models import SetModel
 
 
@@ -10,41 +14,73 @@ class SetRepository(ISetRepository):
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def list(self) -> list[Set]:
+    async def list(
+        self,
+        limit: int = 5,
+        cursor: Optional[str] = None,
+        order: OrderType = "asc",
+    ) -> PaginatedResult[Set]:
         """
         Lista todos os Sets no banco de dados.
 
         Returns:
             list[Set]: Uma lista de entidades Set.
         """
-        # 1. Cria a query que seleciona todos os dados da tabela SetModel.
-        # Utilizamos selectinload() se houver relacionamentos que precisam ser carregados,
-        # mas aqui vamos manter simples, selecionando apenas o modelo principal.
-        query = select(SetModel)
 
-        # 2. Executa a query no banco de dados.
+        query = select(SetModel).options(selectinload(SetModel.set_type))
+
+        if order == "asc":
+            query = query.order_by(SetModel.id.asc())
+        else:
+            query = query.order_by(SetModel.id.desc())
+
+        if cursor:
+            if order == "asc":
+                query = query.where(SetModel.id > cursor)
+            else:
+                query = query.where(SetModel.id < cursor)
+
+        query = query.limit(limit + 1)
+
         result = await self._session.execute(query)
 
-        # 3. Mapeia os resultados.
-        # O .scalars() retorna os elementos de SetModel de forma plana,
-        # evitando tuplas (SetModel,).
-        models = result.scalars().all()
+        rows = result.scalars().all()
 
-        # 4. Converte cada modelo SQLAlchemy para a entidade de domínio.
-        # Assumimos aqui que Set tem um método de fábrica `from_model`.
-        # Se você não tiver esse método, você precisará criá-lo.
-        entities = [
+        if len(rows) > limit:
+            next_cursor = rows[-1].id
+            rows = rows[:-1]
+        else:
+            next_cursor = None
+
+        if order == "desc":
+            rows.reverse()
+
+        items = [
             Set(
-                id=model.id,
-                name=model.name,
-                description=model.description,
-                created_at=model.created_at,
-                updated_at=model.updated_at,
+                id=r.id,
+                name=r.name,
+                code=r.code,
+                external_id=r.external_id,
+                set_type_id=r.set_type_id,
+                card_count=r.card_count,
+                release_date=r.release_date,
+                is_digital=r.is_digital,
+                is_foil_only=r.is_foil_only,
+                is_non_foil_only=r.is_non_foil_only,
+                icon_uri=r.icon_uri,
+                set_type=SetType(
+                    id=r.set_type.id,
+                    name=r.set_type.name,
+                    description=r.set_type.description,
+                ),
             )
-            for model in models
+            for r in rows
         ]
 
-        return entities
+        return PaginatedResult(
+            items=items,
+            next_cursor=next_cursor,
+        )
 
     async def create(self, set: Set) -> str:
         """
@@ -67,6 +103,7 @@ class SetRepository(ISetRepository):
             is_digital=set.is_digital,
             is_foil_only=set.is_foil_only,
             is_non_foil_only=set.is_non_foil_only,
+            icon_uri=set.icon_uri,
         )
 
         # 2. Adiciona o modelo à sessão.

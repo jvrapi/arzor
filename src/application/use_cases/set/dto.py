@@ -1,4 +1,9 @@
+from dataclasses import dataclass
+from typing import Optional
+
 from pydantic import BaseModel
+
+from domain.value_objects import OrderType
 
 
 class CreateSetInput(BaseModel):
@@ -11,3 +16,11 @@ class CreateSetInput(BaseModel):
     is_digital: bool
     is_foil_only: bool
     is_non_foil_only: bool
+    icon_uri: str
+
+
+@dataclass
+class ListSetsDTO:
+    limit: int = 20
+    cursor: Optional[str] = None
+    order: OrderType = "asc"
