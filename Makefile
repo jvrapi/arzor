@@ -47,3 +47,7 @@ clean: ## Clean up generated files
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type d -name ".ruff_cache" -exec rm -rf {} +
 	rm -rf htmlcov .coverage
+
+active-venv:
+	@echo "To activate the virtual environment, run:"
+	@echo "source .venv/bin/activate"

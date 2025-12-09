@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from datetime import date
+
+from pydantic import BaseModel
 
 from domain.value_objects import (
     BorderColor,
@@ -10,31 +12,40 @@ from domain.value_objects import (
     SecurityStamp,
 )
 
-from .base import BaseEntity
 
-
-@dataclass(frozen=True)
-class Card(BaseEntity):
-    # Set & identity
+class CreateCardInput(BaseModel):
     external_id: str
     set_id: str
     oracle_id: str
-
-    # Basic info
     name: str
     lang: str
-    released_at: str
+    released_at: date
     layout: str
 
-    # Visual / metadata
     image_uris: ImageUris
+
+    cmc: int
+    type_line: str
+    oracle_text: str
+
+    mana_cost: str | None
+    power: str | None
+    toughness: str | None
+    loyalty: str | None
+
+    colors: list[Color]
+    color_identity: list[Color]
+    keywords: list[str]
+
+    legalities: Legalities
+
     collector_number: str
     rarity: Rarity
     border_color: BorderColor
     security_stamp: SecurityStamp | None
+
     finishes: list[Finish]
 
-    # Flags
     is_reserved: bool
     is_game_changer: bool
     is_foil: bool
@@ -46,26 +57,3 @@ class Card(BaseEntity):
     is_full_art: bool
     is_textless: bool
     is_found_on_booster: bool
-
-    # Mana & cost
-    mana_cost: str | None
-    cmc: int
-
-    # Typing & rules
-    type_line: str
-    oracle_text: str | None
-
-    # P/T/L
-    power: str | None
-    toughness: str | None
-    loyalty: str | None
-
-    # Colors
-    colors: list[Color] | None
-    color_identity: list[Color] | None
-
-    # Keywords
-    keywords: list[str] | None
-
-    # Legalities
-    legalities: Legalities

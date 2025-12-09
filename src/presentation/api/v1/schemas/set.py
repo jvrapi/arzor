@@ -38,18 +38,6 @@ class CreateSetDTO(BaseSetDTO):
         return str(v)
 
 
-class ListSetsQueryParamsDTO(BaseModel):
-    limit: Optional[int] = Field(
-        5, description="The maximum number of sets to return", ge=1, le=100
-    )
-    cursor: Optional[str] = Field(
-        None, description="The cursor for pagination to fetch the next set of results"
-    )
-    order: Optional[str] = Field(
-        default="asc", pattern="^(asc|desc)$", description="Ordering direction"
-    )
-
-
 class SetResponseDTO(BaseSetDTO):
     id: UUID = Field(..., description="The unique identifier of the set")
     set_type: SetTypeResponseDTO = Field(

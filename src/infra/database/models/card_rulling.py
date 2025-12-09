@@ -17,13 +17,23 @@ class CardRullingModel(Base):
         comment="Primary key UUID for the card rulling",
     )
 
-    text: Mapped[str] = mapped_column(Text, nullable=False, comment="Rulling text")
+    oracle_id: Mapped[str] = mapped_column(
+        String(36),
+        nullable=False,
+        comment="Oracle ID associated with the card rulling",
+    )
 
     card_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey("cards.id", ondelete="CASCADE"),
         nullable=False,
         comment="Foreign key to the card this rulling belongs to",
+    )
+
+    comment: Mapped[str] = mapped_column(Text, nullable=False, comment="Rulling text")
+
+    source: Mapped[str] = mapped_column(
+        String(255), nullable=False, comment="Source of the rulling"
     )
 
     created_at: Mapped[datetime] = mapped_column(
