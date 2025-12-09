@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from application.use_cases.set import CreateSetUseCase, ListSetsUseCase
 from application.use_cases.set_types import ListSetTypesUseCase
@@ -35,7 +35,7 @@ async def list_set_types(
     ]
 
 
-@router.post("/")
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_set(
     raw: CreateSetDTO, set_repository: ISetRepository = Depends(get_set_repository)
 ) -> CreateSetResponseDTO:
