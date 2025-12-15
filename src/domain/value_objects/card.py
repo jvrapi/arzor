@@ -39,7 +39,7 @@ class BorderColor(str, Enum):
 
 class Finish(str, Enum):
     foil = "foil"
-    non_foil = "non_foil"
+    nonfoil = "nonfoil"
     etched = "etched"
 
 

@@ -23,11 +23,11 @@ class CardModel(Base):
     )
 
     external_id: Mapped[str] = mapped_column(
-        String(100), unique=True, nullable=False, comment="Original ID from Scryfall"
+        String(36), unique=True, nullable=False, comment="Original ID from Scryfall"
     )
 
-    oracle_id: Mapped[str] = mapped_column(
-        String(36), nullable=False, comment="Scryfall oracle_id"
+    oracle_id: Mapped[str | None] = mapped_column(
+        String(36), nullable=True, comment="Scryfall oracle_id"
     )
 
     set_id: Mapped[str] = mapped_column(
@@ -56,18 +56,18 @@ class CardModel(Base):
     )
 
     mana_cost: Mapped[str] = mapped_column(
-        String(20), nullable=True, comment="Mana cost of the card"
+        String(100), nullable=True, comment="Mana cost of the card"
     )
 
-    cmc: Mapped[int] = mapped_column(
+    cmc: Mapped[int | None] = mapped_column(
         Integer, nullable=True, comment="Converted mana cost"
     )
 
-    type_line: Mapped[str] = mapped_column(
+    type_line: Mapped[str | None] = mapped_column(
         String(200), nullable=True, comment="Type line of the card"
     )
 
-    oracle_text: Mapped[str] = mapped_column(
+    oracle_text: Mapped[str | None] = mapped_column(
         Text, nullable=True, comment="Oracle text of the card (long text)"
     )
 
@@ -119,8 +119,8 @@ class CardModel(Base):
         ARRAY(Enum(Finish, name="finish_enum", native_enum=False)), nullable=False
     )
 
-    image_uris: Mapped[dict[str, str]] = mapped_column(
-        JSONB, nullable=False, comment="Image URIs from Scryfall"
+    image_uris: Mapped[dict[str, str] | None] = mapped_column(
+        JSONB, nullable=True, comment="Image URIs from Scryfall"
     )
 
     # Boolean fields
@@ -158,10 +158,6 @@ class CardModel(Base):
         default=False,
         comment="Indicates if the card can appear in boosters (from Scryfall)",
     )
-
-    is_foil: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-
-    is_non_foil: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     is_game_changer: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False

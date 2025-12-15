@@ -66,7 +66,7 @@ class SetRepository(ISetRepository):
                 release_date=r.release_date,
                 is_digital=r.is_digital,
                 is_foil_only=r.is_foil_only,
-                is_non_foil_only=r.is_non_foil_only,
+                is_nonfoil_only=r.is_nonfoil_only,
                 icon_uri=r.icon_uri,
                 set_type=SetType(
                     id=r.set_type.id,
@@ -102,7 +102,7 @@ class SetRepository(ISetRepository):
             release_date=set.release_date,
             is_digital=set.is_digital,
             is_foil_only=set.is_foil_only,
-            is_non_foil_only=set.is_non_foil_only,
+            is_nonfoil_only=set.is_nonfoil_only,
             icon_uri=set.icon_uri,
         )
 
@@ -148,7 +148,7 @@ class SetRepository(ISetRepository):
             release_date=model.release_date,
             is_digital=model.is_digital,
             is_foil_only=model.is_foil_only,
-            is_non_foil_only=model.is_non_foil_only,
+            is_nonfoil_only=model.is_nonfoil_only,
             created_at=model.created_at,
             updated_at=model.updated_at,
         )

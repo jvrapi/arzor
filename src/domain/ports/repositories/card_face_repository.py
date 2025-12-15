@@ -5,5 +5,5 @@ from domain.entities import CardFace
 
 class ICardFaceRepository(ABC):
     @abstractmethod
-    def create(self, card_face_data: CardFace) -> str:
+    def create_many(self, card_faces: list[CardFace]) -> list[str]:
         pass

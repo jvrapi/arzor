@@ -23,7 +23,7 @@ class BaseSetDTO(BaseModel):
     is_foil_only: bool = Field(
         ..., description="Indicates if the set contains only foil cards"
     )
-    is_non_foil_only: bool = Field(
+    is_nonfoil_only: bool = Field(
         ..., description="Indicates if the set contains only non-foil cards"
     )
     icon_uri: str = Field(..., description="The URI for the set icon image")

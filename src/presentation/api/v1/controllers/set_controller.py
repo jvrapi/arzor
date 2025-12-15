@@ -65,7 +65,7 @@ async def list_sets(
                 release_date=set_.release_date,
                 is_digital=set_.is_digital,
                 is_foil_only=set_.is_foil_only,
-                is_non_foil_only=set_.is_non_foil_only,
+                is_nonfoil_only=set_.is_nonfoil_only,
                 icon_uri=set_.icon_uri,
                 set_type=SetTypeResponseDTO(
                     id=set_.set_type.id,

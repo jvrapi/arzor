@@ -46,7 +46,7 @@ class SetModel(Base):
         default=False,
         comment="Indicates if the set contains only foil cards",
     )
-    is_non_foil_only: Mapped[bool] = mapped_column(
+    is_nonfoil_only: Mapped[bool] = mapped_column(
         nullable=False,
         default=False,
         comment="Indicates if the set contains only non-foil cards",

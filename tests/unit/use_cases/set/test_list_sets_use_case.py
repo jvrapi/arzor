@@ -22,7 +22,7 @@ def make_set(
         release_date=datetime(2024, 1, 1, tzinfo=timezone.utc),
         is_digital=False,
         is_foil_only=False,
-        is_non_foil_only=False,
+        is_nonfoil_only=False,
         icon_uri="https://example.com/icon.png",
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),

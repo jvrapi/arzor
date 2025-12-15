@@ -1,7 +1,4 @@
-from .card import (
-    CreateCardDTO,
-    CreateCardResponseDTO,
-)
+from .card import CreateCardDTO, CreateCardFaceDTO, CreateCardResponseDTO
 from .set import (
     CreateSetDTO,
     CreateSetResponseDTO,
@@ -18,4 +15,5 @@ __all__ = [
     "PaginatedResponseDTO",
     "CreateCardDTO",
     "CreateCardResponseDTO",
+    "CreateCardFaceDTO",
 ]

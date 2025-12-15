@@ -1,4 +1,4 @@
 from .create_cards_use_case import CreateCardUseCase
-from .dto import CreateCardInput
+from .dto import CreateCardFaceInput, CreateCardInput
 
-__all__ = ["CreateCardInput", "CreateCardUseCase"]
+__all__ = ["CreateCardInput", "CreateCardUseCase", "CreateCardFaceInput"]

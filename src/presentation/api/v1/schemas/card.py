@@ -17,46 +17,25 @@ class CreateCardResponseDTO(BaseModel):
     id: str = Field(description="A unique identifier (UUID) for the created card.")
 
 
-class CreateCardDTO(BaseModel):
-    set_id: str = Field(
-        description="Scryfall set ID that identifies the set this card belongs to."
-    )
-
-    oracle_id: str = Field(
-        description="Oracle ID from Scryfall — identifies the card's oracle identity (shared across different prints)."
-    )
-
-    external_id: str = Field(description="External id of printed card")
-
+class BaseCreateCardDTO(BaseModel):
     name: str = Field(description="The card’s name.")
 
-    lang: str = Field(
-        description="The language code of this card printing (e.g. 'en', 'pt', ...)."
+    oracle_id: str | None = Field(
+        default=None,
+        description="Oracle ID from Scryfall — identifies the card's oracle identity (shared across different prints).",
     )
-
-    released_at: date = Field(
-        description="Release date of this card printing (YYYY-MM-DD)."
-    )
-
-    layout: str = Field(
-        description="Layout type of this card (normal, split, transform, modal_dfc, etc.)."
-    )
-
-    image_uris: ImageUris = Field(
-        description="URLs for various image sizes/crops for this card. As provided by Scryfall."
-    )
-
-    cmc: int = Field(description="Converted mana cost (mana value) of this card.")
-
-    type_line: str = Field(
-        description="Type line of the card (as per Scryfall Oracle data)."
-    )
-
-    oracle_text: str = Field(description="Oracle text (rules text) of the card.")
 
     mana_cost: str | None = Field(
         default=None,
         description="Mana cost of the card in MTG notation (e.g., '{3}{U}{W}'). May be null if not applicable.",
+    )
+
+    type_line: str | None = Field(
+        default=None, description="Type line of the card (as per Scryfall Oracle data)."
+    )
+
+    oracle_text: str | None = Field(
+        default=None, description="Oracle text (rules text) of the card."
     )
 
     power: str | None = Field(
@@ -78,6 +57,11 @@ class CreateCardDTO(BaseModel):
         ),
     )
 
+    image_uris: ImageUris | None = Field(
+        default=None,
+        description="URLs for various image sizes/crops for this card. As provided by Scryfall.",
+    )
+
     colors: list[Color] | None = Field(
         default=None, description="Colors of the card (e.g. ['U', 'W'])."
     )
@@ -85,6 +69,34 @@ class CreateCardDTO(BaseModel):
     color_identity: list[Color] | None = Field(
         default=None,
         description="Color identity of the card (for deck-building restrictions).",
+    )
+
+    cmc: int | None = Field(
+        default=0, description="Converted mana cost (mana value) of this card."
+    )
+
+
+class CreateCardFaceDTO(BaseCreateCardDTO):
+    pass
+
+
+class CreateCardDTO(BaseCreateCardDTO):
+    set_id: str = Field(
+        description="Scryfall set ID that identifies the set this card belongs to."
+    )
+
+    external_id: str = Field(description="External id of printed card")
+
+    lang: str = Field(
+        description="The language code of this card printing (e.g. 'en', 'pt', ...)."
+    )
+
+    released_at: date = Field(
+        description="Release date of this card printing (YYYY-MM-DD)."
+    )
+
+    layout: str = Field(
+        description="Layout type of this card (normal, split, transform, modal_dfc, etc.)."
     )
 
     keywords: list[str] | None = Field(
@@ -116,16 +128,14 @@ class CreateCardDTO(BaseModel):
         description="List of finishes available for this card (foil, nonfoil, etched, etc.)."
     )
 
+    faces: list[CreateCardFaceDTO] | None = Field(
+        default=None, description="Card faces, if any."
+    )
+
     is_reserved: bool = Field(description="True if the card is on the Reserved List.")
 
     is_game_changer: bool = Field(
         description="True if the card is flagged as a 'game-changer' by Scryfall."
-    )
-
-    is_foil: bool = Field(description="True if a foil version of this card exists.")
-
-    is_non_foil: bool = Field(
-        description="True if a non-foil version of this card exists."
     )
 
     is_oversized: bool = Field(

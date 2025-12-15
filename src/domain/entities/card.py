@@ -11,34 +11,26 @@ from domain.value_objects import (
 )
 
 from .base import BaseEntity
+from .card_face import CardFace
 
 
 @dataclass(frozen=True)
 class Card(BaseEntity):
-    # Set & identity
     external_id: str
     set_id: str
     oracle_id: str
-
-    # Basic info
     name: str
     lang: str
     released_at: str
     layout: str
-
-    # Visual / metadata
     image_uris: ImageUris
     collector_number: str
     rarity: Rarity
     border_color: BorderColor
     security_stamp: SecurityStamp | None
     finishes: list[Finish]
-
-    # Flags
     is_reserved: bool
     is_game_changer: bool
-    is_foil: bool
-    is_non_foil: bool
     is_oversized: bool
     is_promo: bool
     is_reprint: bool
@@ -46,26 +38,15 @@ class Card(BaseEntity):
     is_full_art: bool
     is_textless: bool
     is_found_on_booster: bool
-
-    # Mana & cost
     mana_cost: str | None
-    cmc: int
-
-    # Typing & rules
+    cmc: int | None
     type_line: str
     oracle_text: str | None
-
-    # P/T/L
     power: str | None
     toughness: str | None
     loyalty: str | None
-
-    # Colors
     colors: list[Color] | None
     color_identity: list[Color] | None
-
-    # Keywords
     keywords: list[str] | None
-
-    # Legalities
     legalities: Legalities
+    faces: list[CardFace]

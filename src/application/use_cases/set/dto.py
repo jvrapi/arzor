@@ -15,7 +15,7 @@ class CreateSetInput(BaseModel):
     release_date: str
     is_digital: bool
     is_foil_only: bool
-    is_non_foil_only: bool
+    is_nonfoil_only: bool
     icon_uri: str
 
 
