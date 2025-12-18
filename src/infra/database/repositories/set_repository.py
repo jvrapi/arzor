@@ -149,6 +149,7 @@ class SetRepository(ISetRepository):
             is_digital=model.is_digital,
             is_foil_only=model.is_foil_only,
             is_nonfoil_only=model.is_nonfoil_only,
+            icon_uri=model.icon_uri,
             created_at=model.created_at,
             updated_at=model.updated_at,
         )

@@ -4,6 +4,7 @@ from application.use_cases.set import CreateSetUseCase, ListSetsUseCase
 from application.use_cases.set_types import ListSetTypesUseCase
 from domain.ports.repositories import ISetRepository, ISetTypeRepository
 from presentation.api.dependencies import get_set_repository, get_set_type_repository
+from presentation.api.v1.mappers import SetMapper
 from presentation.api.v1.schemas import (
     CreateSetDTO,
     CreateSetResponseDTO,
@@ -43,7 +44,7 @@ async def create_set(
     Cria um novo set com os dados fornecidos.
     """
     use_case = CreateSetUseCase(set_repository)
-    result = await use_case.execute(raw)
+    result = await use_case.execute(SetMapper.dto_to_input(raw))
 
     return CreateSetResponseDTO(id=result)
 
