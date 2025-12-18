@@ -4,9 +4,10 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from domain.entities import Set, SetType
+from domain.entities import Set
 from domain.ports.repositories import FindSetProps, ISetRepository
 from domain.value_objects import OrderType, PaginatedResult
+from infra.database.mappers import SetMapper
 from infra.database.models import SetModel
 
 
@@ -52,30 +53,7 @@ class SetRepository(ISetRepository):
         else:
             next_cursor = None
 
-        if order == "desc":
-            rows.reverse()
-
-        items = [
-            Set(
-                id=r.id,
-                name=r.name,
-                code=r.code,
-                external_id=r.external_id,
-                set_type_id=r.set_type_id,
-                card_count=r.card_count,
-                release_date=r.release_date,
-                is_digital=r.is_digital,
-                is_foil_only=r.is_foil_only,
-                is_nonfoil_only=r.is_nonfoil_only,
-                icon_uri=r.icon_uri,
-                set_type=SetType(
-                    id=r.set_type.id,
-                    name=r.set_type.name,
-                    description=r.set_type.description,
-                ),
-            )
-            for r in rows
-        ]
+        items = [SetMapper.to_entity(r) for r in rows]
 
         return PaginatedResult(
             items=items,
@@ -138,18 +116,4 @@ class SetRepository(ISetRepository):
         if model is None:
             return None
 
-        return Set(
-            id=model.id,
-            name=model.name,
-            code=model.code,
-            external_id=model.external_id,
-            set_type_id=model.set_type_id,
-            card_count=model.card_count,
-            release_date=model.release_date,
-            is_digital=model.is_digital,
-            is_foil_only=model.is_foil_only,
-            is_nonfoil_only=model.is_nonfoil_only,
-            icon_uri=model.icon_uri,
-            created_at=model.created_at,
-            updated_at=model.updated_at,
-        )
+        return SetMapper.to_entity(model)

@@ -40,8 +40,8 @@ class CreateSetDTO(BaseSetDTO):
 
 class SetResponseDTO(BaseSetDTO):
     id: UUID = Field(..., description="The unique identifier of the set")
-    set_type: SetTypeResponseDTO = Field(
-        ..., description="The type information of the set"
+    set_type: SetTypeResponseDTO | None = Field(
+        default=None, description="The type information of the set"
     )
 
 

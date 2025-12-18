@@ -9,6 +9,7 @@ from presentation.api.v1.schemas import (
     CreateSetDTO,
     CreateSetResponseDTO,
     PaginatedResponseDTO,
+    PaginationQueryParam,
     SetResponseDTO,
     SetTypeResponseDTO,
 )
@@ -52,9 +53,14 @@ async def create_set(
 @router.get("/")
 async def list_sets(
     set_repository: ISetRepository = Depends(get_set_repository),
+    params: PaginationQueryParam = Depends(),
 ) -> PaginatedResponseDTO[SetResponseDTO]:
     use_case = ListSetsUseCase(set_repository)
-    result = await use_case.execute()
+    result = await use_case.execute(
+        order=params.order,
+        cursor=params.cursor,
+        limit=params.limit,
+    )
     return PaginatedResponseDTO[SetResponseDTO](
         items=[
             SetResponseDTO(

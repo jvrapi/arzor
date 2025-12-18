@@ -12,6 +12,7 @@ from domain.value_objects import (
 
 from .base import BaseEntity
 from .card_face import CardFace
+from .set import Set
 
 
 @dataclass(frozen=True)
@@ -49,4 +50,5 @@ class Card(BaseEntity):
     color_identity: list[Color] | None
     keywords: list[str] | None
     legalities: Legalities
-    faces: list[CardFace]
+    faces: list[CardFace] | None
+    set: Set | None = None

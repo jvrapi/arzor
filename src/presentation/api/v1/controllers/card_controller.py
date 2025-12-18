@@ -1,6 +1,10 @@
 from fastapi import APIRouter, Depends, status
 
-from application.use_cases.card import CreateCardRulingsUseCase, CreateCardUseCase
+from application.use_cases.card import (
+    CreateCardRulingsUseCase,
+    CreateCardUseCase,
+    ListCardsUseCase,
+)
 from domain.ports.repositories import ICardRepository, ICardRulingRepository
 from presentation.api.dependencies import (
     get_card_repository,
@@ -8,10 +12,13 @@ from presentation.api.dependencies import (
 )
 from presentation.api.v1.mappers import CardMapper, CardRulingMapper
 from presentation.api.v1.schemas import (
+    CardResponseDTO,
     CardRulingResponseDTO,
     CreateCardDTO,
     CreateCardResponseDTO,
     CreateCardRulingDTO,
+    ListCardsParamsDTO,
+    PaginatedResponseDTO,
 )
 
 router = APIRouter(tags=["Card"], prefix="/cards")
@@ -41,3 +48,17 @@ async def create_card_rulings(
     )
 
     return [{"id": id} for id in created_ids]
+
+
+@router.get("/")
+async def list_cards(
+    card_repository: ICardRepository = Depends(get_card_repository),
+    params: ListCardsParamsDTO = Depends(),
+) -> PaginatedResponseDTO[CardResponseDTO]:
+    use_case = ListCardsUseCase(card_repository)
+    result = await use_case.execute(**params.model_dump())
+
+    return PaginatedResponseDTO[CardResponseDTO](
+        items=[CardMapper.entity_to_response(card) for card in result.items],
+        next_cursor=result.next_cursor,
+    )

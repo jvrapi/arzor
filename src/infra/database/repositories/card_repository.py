@@ -1,7 +1,11 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from domain.entities import Card
 from domain.ports.repositories import ICardRepository
+from domain.value_objects import OrderType, PaginatedResult
+from infra.database.mappers import CardMapper
 from infra.database.models import CardFaceModel, CardModel
 
 
@@ -76,3 +80,50 @@ class CardRepository(ICardRepository):
                 ids.append(card_model.id)
 
         return ids
+
+    async def list(
+        self,
+        limit: int | None = 5,
+        cursor: str | None = None,
+        order: OrderType | None = "asc",
+        set_id: str | None = None,
+        add_set_info: bool = False,
+    ) -> PaginatedResult[Card]:
+        options = [selectinload(CardModel.faces)]
+
+        if add_set_info:
+            options.append(selectinload(CardModel.set))
+
+        query = select(CardModel).options(*options)
+        if set_id:
+            query = query.where(CardModel.set_id == set_id)
+
+        if order == "asc":
+            query = query.order_by(CardModel.id.asc())
+        else:
+            query = query.order_by(CardModel.id.desc())
+
+        if cursor:
+            if order == "asc":
+                query = query.where(CardModel.id > cursor)
+            else:
+                query = query.where(CardModel.id < cursor)
+
+        query = query.limit(limit + 1)
+
+        result = await self._session.execute(query)
+
+        rows = result.scalars().all()
+
+        if len(rows) > limit:
+            next_cursor = rows[-1].id
+            rows = rows[:-1]
+        else:
+            next_cursor = None
+
+        items = [CardMapper.to_entity(r) for r in rows]
+
+        return PaginatedResult(
+            items=items,
+            next_cursor=next_cursor,
+        )

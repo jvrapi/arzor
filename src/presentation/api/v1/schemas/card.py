@@ -12,6 +12,9 @@ from domain.value_objects import (
     SecurityStamp,
 )
 
+from .pagination import PaginationQueryParam
+from .set import SetResponseDTO
+
 
 class CreateCardResponseDTO(BaseModel):
     id: str = Field(description="A unique identifier (UUID) for the created card.")
@@ -158,4 +161,33 @@ class CreateCardDTO(BaseCreateCardDTO):
 
     is_found_on_booster: bool = Field(
         description="True if this card can appear in boosters (booster-legal)."
+    )
+
+
+class CardFaceResponseDTO(CreateCardFaceDTO):
+    id: str = Field(description="A unique identifier (UUID) for the card face.")
+
+
+class CardResponseDTO(CreateCardDTO):
+    id: str = Field(description="A unique identifier (UUID) for the card.")
+
+    faces: list[CardFaceResponseDTO] | None = Field(
+        default=None, description="Card faces, if any."
+    )
+
+    set: SetResponseDTO | None = Field(
+        default=None,
+        description="Set information for the set this card belongs to (if requested).",
+    )
+
+
+class ListCardsParamsDTO(PaginationQueryParam):
+    set_id: str | None = Field(
+        default=None,
+        description="Filter cards by the specified set ID.",
+    )
+
+    add_set_info: bool = Field(
+        default=False,
+        description="If true, includes set information in the card response.",
     )
