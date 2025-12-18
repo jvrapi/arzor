@@ -27,8 +27,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="API Boilerplate",
-    description="API Bolilerplate with FastAPI, Pydantic, and Uvicorn",
+    title="Arzor",
+    description="An API for managing and retrieving information about MTG cards.",
     version="1.0.0",
     lifespan=lifespan,
 )

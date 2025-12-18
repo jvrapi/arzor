@@ -12,7 +12,7 @@ from presentation.api.v1.schemas import (
     SetTypeResponseDTO,
 )
 
-router = APIRouter(tags=["set"], prefix="/sets")
+router = APIRouter(tags=["Set"], prefix="/sets")
 
 
 @router.get("/types")

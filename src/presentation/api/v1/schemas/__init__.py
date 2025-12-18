@@ -1,4 +1,5 @@
 from .card import CreateCardDTO, CreateCardFaceDTO, CreateCardResponseDTO
+from .card_ruling import CardRulingResponseDTO, CreateCardRulingDTO
 from .set import (
     CreateSetDTO,
     CreateSetResponseDTO,
@@ -16,4 +17,6 @@ __all__ = [
     "CreateCardDTO",
     "CreateCardResponseDTO",
     "CreateCardFaceDTO",
+    "CreateCardRulingDTO",
+    "CardRulingResponseDTO",
 ]

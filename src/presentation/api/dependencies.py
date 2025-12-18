@@ -1,9 +1,18 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from domain.ports.repositories import ICardRepository, ISetTypeRepository
+from domain.ports.repositories import (
+    ICardRepository,
+    ICardRulingRepository,
+    ISetTypeRepository,
+)
 from infra.database.base import get_db
-from infra.database.repositories import CardRepository, SetRepository, SetTypeRepository
+from infra.database.repositories import (
+    CardRepository,
+    CardRulingRepository,
+    SetRepository,
+    SetTypeRepository,
+)
 
 
 async def get_set_type_repository(
@@ -22,3 +31,9 @@ async def get_card_repository(
     session: AsyncSession = Depends(get_db),
 ) -> ICardRepository:
     return CardRepository(session)
+
+
+async def get_card_ruling_repository(
+    session: AsyncSession = Depends(get_db),
+) -> ICardRulingRepository:
+    return CardRulingRepository(session)

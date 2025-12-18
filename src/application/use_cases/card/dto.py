@@ -64,3 +64,10 @@ class CreateCardInput(BaseCreateCardInput):
     is_full_art: bool
     is_textless: bool
     is_found_on_booster: bool
+
+
+class CreateCardRulingInput(BaseModel):
+    card_id: str
+    source: str
+    published_at: str
+    comment: str
