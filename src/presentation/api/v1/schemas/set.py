@@ -15,6 +15,7 @@ class SetTypeResponseDTO(BaseModel):
 class BaseSetDTO(BaseModel):
     name: str = Field(..., description="The name of the set")
     code: str = Field(..., description="The code of the set")
+    external_id: str = Field(..., description="The external identifier of the set")
     card_count: int = Field(..., description="The number of cards in the set")
     release_date: str = Field(
         ..., description="The release date of the set in YYYY-MM-DD format"
@@ -54,4 +55,10 @@ class PaginatedResponseDTO(BaseModel, Generic[T]):
     next_cursor: Optional[str] = Field(
         None,
         description="Cursor to fetch the next page, or None if this is the last page",
+    )
+
+
+class GetSetParams(BaseModel):
+    add_set_type_info: bool | None = Field(
+        default=False, description="Whether to include set type information"
     )

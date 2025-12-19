@@ -1,6 +1,3 @@
-from dataclasses import dataclass
-from typing import Optional
-
 from pydantic import BaseModel
 
 from domain.value_objects import OrderType
@@ -19,8 +16,13 @@ class CreateSetInput(BaseModel):
     icon_uri: str
 
 
-@dataclass
-class ListSetsDTO:
+class ListSetsDTO(BaseModel):
     limit: int = 20
-    cursor: Optional[str] = None
+    cursor: str | None = None
     order: OrderType = "asc"
+
+
+class FindSetProps(BaseModel):
+    id: str | None = None
+    external_id: str | None = None
+    code: str | None = None

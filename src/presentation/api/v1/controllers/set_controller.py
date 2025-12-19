@@ -1,13 +1,16 @@
 from fastapi import APIRouter, Depends, status
 
-from application.use_cases.set import CreateSetUseCase, ListSetsUseCase
+from application.use_cases.set import CreateSetUseCase, GetSetUseCase, ListSetsUseCase
 from application.use_cases.set_types import ListSetTypesUseCase
 from domain.ports.repositories import ISetRepository, ISetTypeRepository
 from presentation.api.dependencies import get_set_repository, get_set_type_repository
 from presentation.api.v1.mappers import SetMapper
 from presentation.api.v1.schemas import (
+    BadRequestResponse,
     CreateSetDTO,
     CreateSetResponseDTO,
+    GetSetParams,
+    NotFoundResponse,
     PaginatedResponseDTO,
     PaginationQueryParam,
     SetResponseDTO,
@@ -37,7 +40,9 @@ async def list_set_types(
     ]
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/", status_code=status.HTTP_201_CREATED, responses={400: BadRequestResponse}
+)
 async def create_set(
     raw: CreateSetDTO, set_repository: ISetRepository = Depends(get_set_repository)
 ) -> CreateSetResponseDTO:
@@ -62,25 +67,64 @@ async def list_sets(
         limit=params.limit,
     )
     return PaginatedResponseDTO[SetResponseDTO](
-        items=[
-            SetResponseDTO(
-                id=set_.id,
-                name=set_.name,
-                code=set_.code,
-                set_type_id=set_.set_type_id,
-                card_count=set_.card_count,
-                release_date=set_.release_date,
-                is_digital=set_.is_digital,
-                is_foil_only=set_.is_foil_only,
-                is_nonfoil_only=set_.is_nonfoil_only,
-                icon_uri=set_.icon_uri,
-                set_type=SetTypeResponseDTO(
-                    id=set_.set_type.id,
-                    name=set_.set_type.name,
-                    description=set_.set_type.description,
-                ),
-            )
-            for set_ in result.items
-        ],
+        items=[SetMapper.entity_to_response(set_) for set_ in result.items],
         next_cursor=result.next_cursor,
     )
+
+
+@router.get(
+    "/id/{id}",
+    responses={
+        404: NotFoundResponse,
+        400: BadRequestResponse,
+    },
+)
+async def get_set_by_id(
+    id: str,
+    set_repository: ISetRepository = Depends(get_set_repository),
+    params: GetSetParams = Depends(),
+) -> SetResponseDTO:
+    use_case = GetSetUseCase(set_repository)
+    result = await use_case.execute(id=id, add_set_type_info=params.add_set_type_info)
+
+    return SetMapper.entity_to_response(result)
+
+
+@router.get(
+    "/code/{code}",
+    responses={
+        404: NotFoundResponse,
+        400: BadRequestResponse,
+    },
+)
+async def get_set_by_code(
+    code: str,
+    set_repository: ISetRepository = Depends(get_set_repository),
+    params: GetSetParams = Depends(),
+) -> SetResponseDTO:
+    use_case = GetSetUseCase(set_repository)
+    result = await use_case.execute(
+        code=code, add_set_type_info=params.add_set_type_info
+    )
+
+    return SetMapper.entity_to_response(result)
+
+
+@router.get(
+    "/external_id/{external_id}",
+    responses={
+        404: NotFoundResponse,
+        400: BadRequestResponse,
+    },
+)
+async def get_set_by_external_id(
+    external_id: str,
+    set_repository: ISetRepository = Depends(get_set_repository),
+    params: GetSetParams = Depends(),
+) -> SetResponseDTO:
+    use_case = GetSetUseCase(set_repository)
+    result = await use_case.execute(
+        external_id=external_id, add_set_type_info=params.add_set_type_info
+    )
+
+    return SetMapper.entity_to_response(result)

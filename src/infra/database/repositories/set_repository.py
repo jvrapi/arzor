@@ -92,7 +92,9 @@ class SetRepository(ISetRepository):
 
         return model.id
 
-    async def get_by(self, find_props: FindSetProps) -> Set | None:
+    async def get_by(
+        self, find_props: FindSetProps, add_set_type_info: bool = False
+    ) -> Set | None:
         """
         Recupera um Set do banco de dados com base nos parâmetros fornecidos.
         Args:
@@ -102,6 +104,9 @@ class SetRepository(ISetRepository):
         """
 
         query = select(SetModel)
+
+        if add_set_type_info:
+            query = query.options(selectinload(SetModel.set_type))
 
         if find_props.id is not None:
             query = query.where(SetModel.id == str(find_props.id))
